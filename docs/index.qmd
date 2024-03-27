@@ -1,0 +1,47 @@
+
+
+```{r}
+
+library(readr)
+
+survey <- read_rds(here::here("data/processed/answers-processed.rds"))
+
+library(ggplot2)
+library(knitr)
+
+paper_rating <- survey["Paper"]
+metal_rating <- survey["Metal"]
+plastic_rating <- survey["Plastic"]
+glass_rating <- survey["Glass"]
+electronics_rating <- survey["Electronics"]
+organicwaste_rating <- survey["Organic waste"]
+
+paper_rating_mean <- (sum(paper_rating)/nrow(paper_rating))
+metal_rating_mean <- sum(metal_rating)/nrow(metal_rating)
+plastic_rating_mean <- sum(plastic_rating)/nrow(plastic_rating)
+glass_rating_mean <- sum(glass_rating)/nrow(glass_rating)
+electronics_rating_mean <- sum(electronics_rating)/nrow(electronics_rating)
+organicwaste_rating_mean <- sum(organicwaste_rating)/nrow(organicwaste_rating)
+
+mean_rating <- cbind(paper_rating_mean, metal_rating_mean, plastic_rating_mean, glass_rating_mean, electronics_rating_mean, organicwaste_rating_mean)
+
+rownames(mean_rating) |>  c("Paper", "Metal", "Plastic", "Glass", "Electronics", "Organic Waste")
+
+mean_rating|> 
+    gt() |> 
+    tab_header(title = "Mean rating of waste separation from 1 to 5 for different types of waste",
+               subtitle = "Subtitel") |>
+
+
+#| label: mean_rating
+#| tbl-cap: "Mean rating of waste separation from 1 to 5 for different types of waste"
+kable(mean_rating, digits = 2)
+
+
+ggplot(data = mean_rating, aes(x = 1, y = mean_paper_rating, col = disp))+
+ labs(title = "Mean rating of waste separation from 1 to 5 for different types of waste")
+     
+
+
+```
+
